@@ -16,9 +16,21 @@ class TestGetReason(unittest.TestCase):
 
     def test_multiple_verbs(self):
         with self.assertRaises(Exception) as context:
-            getReason(reason='save and spend money')
+            getReason(reason='save, spend money')
 
         self.assertTrue('Reason must include single item.' in str(context.exception))
+
+    def test_atomic_error(self):
+        with self.assertRaises(Exception) as context:
+            getReason(reason='produce dog and cat beds')
+
+        self.assertTrue('Reason must include single item to achieve atomic property.' in str(context.exception))
+
+    def test_minimal_error(self):
+        with self.assertRaises(Exception) as context:
+            getReason(reason='producing (in-house) dog beds')
+
+        self.assertTrue('Please do not specify anything more than a reason to keep requirement minimal.' in str(context.exception))
 
 
 if __name__ == '__main__':

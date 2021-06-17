@@ -49,6 +49,18 @@ class TestGetDemand(unittest.TestCase):
 
         self.assertTrue('Demand must include single item to achieve atomic property.' in str(context.exception))
 
+    def test_atomic_error(self):
+        with self.assertRaises(Exception) as context:
+            getDemand(demand='produce dog and cat beds')
+
+        self.assertTrue('Demand must include single item to achieve atomic property.' in str(context.exception))
+
+    def test_minimal_error(self):
+        with self.assertRaises(Exception) as context:
+            getDemand(demand='producing (in-house) dog beds')
+
+        self.assertTrue('Please do not specify anything more than a demand to keep requirement minimal.' in str(context.exception))
+
 
 if __name__ == '__main__':
     unittest.main()
