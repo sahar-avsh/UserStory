@@ -17,7 +17,7 @@ def main():
         else:
             flag_stop = False
 
-    reqs = ' '.join([str(item) for item in requirements])
+    reqs = ''.join([str(item) + '\n' for item in requirements])
     return 'List of requirements:' + '\n' + reqs
 
 

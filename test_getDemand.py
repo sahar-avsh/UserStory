@@ -17,25 +17,25 @@ class TestGetDemand(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             getDemand(demand='Dog')
 
-        self.assertTrue('Demand must start with a verb.' in str(context.exception))
+        self.assertTrue('Demand must start with a verb, "not" or "to".' in str(context.exception))
 
     def test_single_word_no_verb_2(self):
         with self.assertRaises(Exception) as context:
             getDemand(demand='For')
 
-        self.assertTrue('Demand must start with a verb.' in str(context.exception))
+        self.assertTrue('Demand must start with a verb, "not" or "to".' in str(context.exception))
 
     def test_multiple_words_no_verb(self):
         with self.assertRaises(Exception) as context:
             getDemand(demand='Dog bed')
 
-        self.assertTrue('Demand must start with a verb.' in str(context.exception))
+        self.assertTrue('Demand must start with a verb, "not" or "to".' in str(context.exception))
 
     def test_multiple_words_wrong_verb_place(self):
         with self.assertRaises(Exception) as context:
             getDemand(demand='Dog bed selling')
 
-        self.assertTrue('Demand must start with a verb.' in str(context.exception))
+        self.assertTrue('Demand must start with a verb, "not" or "to".' in str(context.exception))
 
     def test_multiple_words_multiple_verbs_1(self):
         with self.assertRaises(Exception) as context:
