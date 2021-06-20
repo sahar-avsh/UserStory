@@ -11,7 +11,7 @@ class TestGetReason(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             getReason(reason='save, spend money')
 
-        self.assertTrue('Reason must include single item.' in str(context.exception))
+        self.assertTrue('Reason must include single item to achieve atomic property.' in str(context.exception))
 
     def test_atomic_error(self):
         with self.assertRaises(Exception) as context:

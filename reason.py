@@ -60,7 +60,7 @@ def getReason(reason):
             verb_count += 1
             # Raise an error in case there is multiple verbs
             if verb_count > 1:
-                raise ValueError('reason must include single item to achieve atomic property.')
+                raise ValueError('Reason must include single item to achieve atomic property.')
             else:
                 try:
                     # This line of code adds auxiliary verbs untouched
@@ -83,4 +83,4 @@ def getReason(reason):
 
 
 if __name__ == '__main__':
-    print(getReason('dog bed'))
+    print(getReason('save spend money'))
