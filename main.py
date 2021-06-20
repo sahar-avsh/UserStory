@@ -1,6 +1,6 @@
 from motor import motor
 
-
+#SWE577 Group 3 Homework 3
 def main():
     requirements = []
     req = motor()
