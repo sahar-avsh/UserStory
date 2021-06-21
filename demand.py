@@ -1,5 +1,6 @@
 import spacy
 import re
+import numpy as np
 
 nlp = spacy.load('en_core_web_lg')
 
@@ -48,26 +49,79 @@ def getDemand(demand):
             pass
         else:
             raise ValueError('Demand must start with a verb, "not" or "to".')
-    # It iterates over the sentence to test it in case of atomic law
-    for i in range(len(doc)):
-        token = doc[i]
-        # Raise an error in case user had used words "and" or "or"
-        if token.pos_ == 'CONJ' or token.pos_ == 'CCONJ':
-            raise ValueError('Demand must include single item to achieve atomic property.')
-        # Raise an error in case there is multiple verbs
-        if token.pos_ == 'VERB' and token.dep_ != 'compound':
-            verb_count += 1
-            if verb_count > 1:
-                raise ValueError('Demand must include single item to achieve atomic property.')
-        # This line of code turns continuous verb into simple verb
-        if i == 0:
-            demand_text += token.lemma_ + ' '
-        # It adds it untouched otherwise
-        else:
-            demand_text += token.text + ' '
 
-    return demand_text[:-1]
+    flag_split = False
+    for token in doc:
+        if token.pos_ == 'CONJ' or token.pos_ == 'CCONJ':
+            docs = [nlp(i.strip()) for i in demand.split('and')]
+            if len(docs) > 1:
+                flag_split = True
+            else:
+                docs = [nlp(i.strip()) for i in demand.split('or')]
+                flag_split = True
+
+    if flag_split:
+        demands = []
+        for j in docs:
+
+            # It iterates over the sentence to test it in case of atomic law
+            for i in range(len(j)):
+                token = j[i]
+
+                if token.pos_ == 'VERB':
+                    verb = token.text
+                elif token.text == 'to':
+                    continue
+
+                # # Raise an error in case user had used words "and" or "or"
+                # if token.pos_ == 'CONJ' or token.pos_ == 'CCONJ':
+                #     raise ValueError('Demand must include single item to achieve atomic property.')
+                # # Raise an error in case there is multiple verbs
+                # if token.pos_ == 'VERB' and token.dep_ != 'compound':
+                #     verb_count += 1
+                #     if verb_count > 1:
+                #         raise ValueError('Demand must include single item to achieve atomic property.')
+
+                # This line of code turns continuous verb into simple verb
+                if i == 0:
+                    if np.array([t.pos_ != 'VERB' for t in j]).all():
+                        demand_text += verb + ' ' + token.text + ' '
+                    else:
+                        demand_text += token.lemma_ + ' '
+                # It adds it untouched otherwise
+                else:
+                    demand_text += token.text + ' '
+
+            demands.append(demand_text[:-1])
+            demand_text = ''
+
+        return demands
+
+    else:
+        for i in range(len(doc)):
+            token = doc[i]
+
+            if token.text == 'to':
+                continue
+
+            # # Raise an error in case user had used words "and" or "or"
+            # if token.pos_ == 'CONJ' or token.pos_ == 'CCONJ':
+            #     raise ValueError('Demand must include single item to achieve atomic property.')
+            # # Raise an error in case there is multiple verbs
+            # if token.pos_ == 'VERB' and token.dep_ != 'compound':
+            #     verb_count += 1
+            #     if verb_count > 1:
+            #         raise ValueError('Demand must include single item to achieve atomic property.')
+
+            # This line of code turns continuous verb into simple verb
+            if i == 0:
+                demand_text += token.lemma_ + ' '
+            # It adds it untouched otherwise
+            else:
+                demand_text += token.text + ' '
+        return [demand_text[:-1]]
 
 
 if __name__ == '__main__':
-    print(getDemand('not get wet'))
+    print(getDemand('to drink water and not to drink juice'))
+

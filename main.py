@@ -1,23 +1,29 @@
 from motor import motor
 
-#SWE577 Group 3 Homework 3
+
 def main():
     requirements = []
     req = motor()
     print(req)
-    requirements.append(req)
+    for r in req:
+        requirements.append(r)
     flag_stop = True
     while flag_stop:
         cont = input('Do you want to continue? [y/n] ')
         if cont == 'y':
             req = motor()
             print(req)
-            requirements.append(req)
+            for r in req:
+                requirements.append(r)
             continue
         else:
             flag_stop = False
 
     reqs = ''.join([str(item) + '\n' for item in requirements])
+
+    with open('requirements.txt', 'w') as f:
+        f.write('List of requirements:' + '\n' + reqs)
+
     return 'List of requirements:' + '\n' + reqs
 
 

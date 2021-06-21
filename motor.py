@@ -9,7 +9,7 @@ def motor():
 
     while flag_role:
         try:
-            role = input('What is your role? ')
+            role = input('What is your role? ').lower().strip()
             r = getRole(role=role)
             flag_role = False
         except ValueError as e:
@@ -20,7 +20,7 @@ def motor():
 
     while flag_demand:
         try:
-            demand = input('What is your demand? ')
+            demand = input('What is your demand? ').lower().strip()
             d = getDemand(demand=demand)
             flag_demand = False
         except ValueError as e:
@@ -31,19 +31,22 @@ def motor():
 
     while flag_reason:
         try:
-            reason = input('What is your reason? ')
+            reason = input('What is your reason? ').lower().strip()
             re, flag_neg = getReason(reason=reason)
             flag_reason = False
         except ValueError as e:
             print(e)
             continue
 
-    if flag_neg:
-        req = 'As a ' + r[0] + ' I want to ' + d + ' so that I do not ' + re
-    else:
-        req = 'As a ' + r[0] + ' I want to ' + d + ' so that I ' + re
+    reqs = []
+    for i in d:
+        if flag_neg:
+            req = 'As a(n) ' + r[0] + ' I want to ' + i + ' so that I do not ' + re
+        else:
+            req = 'As a(n) ' + r[0] + ' I want to ' + i + ' so that I ' + re
+        reqs.append(req)
 
-    return req
+    return reqs
 
 
 if __name__ == '__main__':
